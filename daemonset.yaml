@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: bmp-display
+  namespace: default
+  labels:
+    k8s-app: bmp-display
+spec:
+  selector:
+    matchLabels:
+      name: bmp-display
+  template:
+    metadata:
+      labels:
+        name: bmp-display
+    spec:
+      containers:
+      - name: bmp-disp
+        image: liztio/bmpdisplay:v0.2.7
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"]
+          privileged: true
+          allowPrivilegeEscalation: true
+      
