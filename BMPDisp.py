@@ -24,16 +24,20 @@ i2c = busio.I2C(board.SCL, board.SDA)
 bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
 bmp280.sea_level_pressure = 1013.25
 
-
+def setup_display(addr):
+    disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST, i2c_address=addr)
+    disp.begin()
+    return disp
 
 # Raspberry Pi pin configuration:
 RST = 24
 
 # 128x32 display with hardware I2C:
-disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST, i2c_address=0x3D)
-
-# Initialize library.
-disp.begin()
+disp = None
+try:
+    disp = setup_display(0x3C)
+except OSError:
+    disp = setup_display(0x3D)
 
 # Clear display.
 disp.clear()
